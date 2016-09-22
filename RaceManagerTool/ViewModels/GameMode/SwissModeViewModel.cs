@@ -1,113 +1,15 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using RaceManagerTool.Models;
+﻿using RaceManagerTool.Models;
 using RaceManagerTool.Services;
 using RaceManagerTool.Tools;
 using RaceManagerTool.View;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
 
 namespace RaceManagerTool.ViewModels
 {
     class SwissModeViewModel : GameModeBaseViewModel
     {
-
-
-        //public ObservableCollection<string> ListTurns { get; set; }
-
-        //private int selectTurn;
-
-        //public int SelectTurn
-        //{
-        //    get { return selectTurn; }
-        //    set
-        //    {
-        //        selectTurn = value;
-        //        OnPropertyChanged("SelectTurn");
-        //    }
-        //}
-        
-
-        //private List<Result> results;
-
-        //public List<Result> Results
-        //{
-        //    get { return results; }
-        //    set { results = value; }
-        //}
-
-
-        
-
-        //public Group SelectItem
-        //{
-        //    get { return selectItem; }
-        //    set
-        //    {
-        //        selectItem = value;
-        //        OnPropertyChanged("SelectItem");
-        //    }
-        //}
-
-        
-        
-
-        //public DelegateCommand StartGameCommand { get; set; }
-        //public DelegateCommand<MainWindow> StartEliminationGameCommand { get; set; }
-        //public DelegateCommand<MainWindow> SetGameInfoCommand { get; set; }
-        //public DelegateCommand<ComboBox> SetResultCommand { get; set; }
-        //public DelegateCommand CleanResultsCommand { get; set; }
-        //public DelegateCommand CellEditEndingCommand { get; set; }
-        //public DelegateCommand CheckPlayersCommand { get; set; }
-
-
-        //public DelegateCommand startNextTurnCommand;
-        //public DelegateCommand StartNextTurnCommand
-        //{
-        //    get { return startNextTurnCommand; }
-        //    set
-        //    {
-        //        startNextTurnCommand = value;
-        //        OnPropertyChanged("StartNextTurnCommand");
-        //    }
-        //}
-
-
-
-
-        //public DelegateCommand RomoveTurnCommand { get; set; }
-
-
-        //public DelegateCommand resetTurnCommand;
-        //public DelegateCommand ResetTurnCommand
-        //{
-        //    get { return resetTurnCommand; }
-        //    set
-        //    {
-        //        resetTurnCommand = value;
-        //        OnPropertyChanged("ResetTurnCommand");
-        //    }
-        //}
-
-        //public DelegateCommand ResetSwissTurnCommand { get; set; }
-        //public DelegateCommand ResetEliminationTurnCommand { get; set; }
-
-        //public DelegateCommand ReRangeGroupCommand { get; set; }
-        //public DelegateCommand SetOverTimeCommand { get; set; }
-        //public DelegateCommand SelectTurnCommand { get; set; }
-
-        //public DelegateCommand ReLiveCommand { get; set; }
-        //public DelegateCommand OutPutGroupCommand { get; set; }
-
-
 
         public SwissModeViewModel():base()
         {
@@ -188,7 +90,6 @@ namespace RaceManagerTool.ViewModels
         }
 
         #endregion
-
 
         #region GameStartButton
 

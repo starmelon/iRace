@@ -122,8 +122,8 @@
     <Compile Include="Services\AppService.cs" />
     <Compile Include="Services\PlayerService.cs" />
     <Compile Include="Services\GameService.cs" />
-    <Compile Include="Services\XmlHostService.cs" />
-    <Compile Include="Services\XmlResultService.cs" />
+    <Compile Include="Dao\XmlHostService.cs" />
+    <Compile Include="Dao\XmlResultService.cs" />
     <Compile Include="Tools\Behaviours.cs" />
     <Compile Include="Tools\Messenger.cs" />
     <Compile Include="Tools\MyEeventCommand.cs" />
@@ -147,7 +147,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -158,7 +158,7 @@
     <Compile Include="View\GameInfoWindow.xaml.cs">
       <DependentUpon>GameInfoWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

@@ -18,7 +18,7 @@ namespace RaceManagerTool
         static void Main()
         {
             App app = new App();
-            app.StartupUri = new Uri("MainWindow.xaml", UriKind.Relative);
+            app.StartupUri = new Uri(@"View\MainWindow.xaml", UriKind.Relative);
 
             AppService.check();
             GameService.GetInstance().init();
