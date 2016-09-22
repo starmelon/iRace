@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--  -->
+<Results>
+    <!--
+    <Result>
+          <Win>2</Win>
+          <Tie>0</Tie>
+          <Lose>1</Lose>
+          <Define>填写要显示的定义（比如2:0:1 或是 Double Lose 等）</Define>
+          <PointLeft>左边选手得分</PointLeft>
+          <PointRight>右边选手得分</PointRight>
+    </Result>
+    -->
+    <Result>
+          <Win>2</Win>
+          <Tie>0</Tie>
+          <Lose>1</Lose>
+		      <Define>2 : 1</Define>
+          <PointLeft>2</PointLeft>
+          <PointRight>1</PointRight>
+    </Result>
+    <Result>
+          <Win>1</Win>
+          <Tie>0</Tie>
+          <Lose>2</Lose>
+          <Define>1 : 2</Define>
+          <PointLeft>1</PointLeft>
+          <PointRight>2</PointRight>
+    </Result>
+    <Result>
+          <Win>2</Win>
+          <Tie>0</Tie>
+          <Lose>0</Lose>
+          <Define>2 : 0</Define>
+          <PointLeft>3</PointLeft>
+          <PointRight>0</PointRight>
+    </Result>
+    <Result>
+          <Win>0</Win>
+          <Tie>0</Tie>
+          <Lose>2</Lose>
+          <Define>0 : 2</Define>
+          <PointLeft>0</PointLeft>
+          <PointRight>3</PointRight>
+    </Result>
+    <Result>
+          <Win>2</Win>
+          <Tie>0</Tie>
+          <Lose>0</Lose>
+          <Define>选手1 规则胜利</Define>
+          <PointLeft>2</PointLeft>
+          <PointRight>0</PointRight>
+    </Result>
+    <Result>
+        <Win>0</Win>
+        <Tie>0</Tie>
+        <Lose>2</Lose>
+        <Define>选手2 规则胜利</Define>
+        <PointLeft>0</PointLeft>
+        <PointRight>2</PointRight>
+    </Result>
+    <Result>
+          <Win>0</Win>
+          <Tie>0</Tie>
+          <Lose>0</Lose>
+          <Define>双败</Define>
+          <PointLeft>0</PointLeft>
+          <PointRight>0</PointRight>
+    </Result>
+</Results>

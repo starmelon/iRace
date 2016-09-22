@@ -1,0 +1,258 @@
+﻿<Window x:Class="RaceManagerTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:dragDrop="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+        Title="MainWindow" Height="500" Width="640" Name="mainwin" WindowStartupLocation="CenterScreen" Closed="mainwin_Closed" >
+    <Window.Resources>
+        
+        <!--<Style x:Key="SingleClickEditing" TargetType="{x:Type DataGridCell}">
+            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown"></EventSetter>
+        </Style>-->
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Image Grid.Row="2"  Grid.ColumnSpan="2" Source="/Resource/OcgSoftLogo.png" HorizontalAlignment="Left" Margin="1,1,0,1" />
+
+            <Button Grid.Column="0" Grid.ColumnSpan="2" Content="编辑赛事" 
+                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Path=DataContext.SetGameInfoCommand}"
+                      /> <!--Command="{Binding SetGameInfoCommand}"-->
+
+            <Button Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Content="开赛" IsEnabled="{Binding CanControControls}" Command="{Binding GameViewModel.StartGameCommand}"  />
+            <Button Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" Content="结束" IsEnabled="{Binding CanControControls}" />
+            <Button Grid.Row="1" Grid.Column="0" Content="删除本轮" IsEnabled="{Binding CanControControls}" Command="{Binding GameViewModel.RomoveTurnCommand}"  />
+            <Button Grid.Row="1" Grid.Column="1" Content="重置本轮" IsEnabled="{Binding CanControControls}" Command="{Binding GameViewModel.ResetTurnCommand}" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="10000" ToolTipService.ShowOnDisabled="True">
+                <Button.ToolTip>
+                    <StackPanel>
+                        <TextBlock Text="1.重置回上一轮结束后开启本轮时的初始状态" />
+                        <TextBlock Text="2.操作前应先清空比分" />
+                    </StackPanel>
+                </Button.ToolTip>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="2" Content="设置超时" IsEnabled="{Binding CanControControls}" Command="{Binding GameViewModel.SetOverTimeCommand}" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="10000" ToolTipService.ShowOnDisabled="True">
+                <Button.ToolTip>
+                    <TextBlock Text="比分结果全部设置为双败" />
+                </Button.ToolTip>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="3" Content="清空比分" IsEnabled="{Binding CanControControls}" Command="{Binding GameViewModel.CleanResultsCommand}" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="10000" ToolTipService.ShowOnDisabled="True">
+                <Button.ToolTip>
+                    <TextBlock Text="只能清空最新轮次设置的所有比分结果" />
+                </Button.ToolTip>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="4" Content="下轮" IsEnabled="{Binding CanControControls}" Command="{Binding GameViewModel.StartNextTurnCommand}" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="10000" ToolTipService.ShowOnDisabled="True">
+                <Button.ToolTip>
+                    <StackPanel>
+                        <TextBlock Text="设置完本轮所有结果分组才能开启下一轮" />
+                    </StackPanel>
+                </Button.ToolTip>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="5" Content="复活" IsEnabled="{Binding CanControControls}" Command="{Binding GameViewModel.ReLiveCommand}" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="10000" ToolTipService.ShowOnDisabled="True">
+                <Button.ToolTip>
+                    <StackPanel>
+                        <TextBlock Text="1.本轮未开始前可进行复活(未设置任何分组结果)" />
+                        <TextBlock Text="2.支持复活所有轮次选手" />
+                        <TextBlock Text="3.选定复活人数超过可复活人数的将进行随机" />
+                        <TextBlock Text="4.可多次执行复活操作" />
+                    </StackPanel>
+                </Button.ToolTip>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="6" Content="重新排表" IsEnabled="{Binding CanControControls}" Command="{Binding GameViewModel.ReRangeGroupCommand}" />
+            <Button Grid.Row="1" Grid.Column="7" Content="赛况" IsEnabled="{Binding CanControControls}" Command="{Binding GameViewModel.CheckPlayersCommand}" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="10000" ToolTipService.ShowOnDisabled="True">
+                <Button.ToolTip>
+                    <TextBlock Text="瑞士轮中查看积分榜" />
+                </Button.ToolTip>
+            </Button>
+
+
+            <TextBlock Grid.Row="2" Grid.ColumnSpan="7" Text="{Binding GameViewModel.Game.FullName}" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="86,0,0,0"  />
+            <ComboBox Grid.Column="7" Grid.Row="2" ItemsSource="{Binding GameViewModel.ListTurns}" SelectedIndex="{Binding GameViewModel.SelectTurn}" IsEnabled="{Binding CanControControls}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,1,1,1" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding GameViewModel.SelectTurnCommand}"  />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+
+            <!--<Button Grid.Column="0" Content="系统设置" />-->
+        </Grid>
+        
+
+     
+
+        <DataGrid Grid.Row="1" Name="dg_groups"  
+                  AutoGenerateColumns="False"  
+                  CanUserReorderColumns="False" 
+                  HeadersVisibility="Column" 
+                  HorizontalGridLinesBrush="#FFD5D5D5" 
+                  VerticalGridLinesBrush="#FFD5D5D5" 
+                  GridLinesVisibility="Horizontal" 
+                  SelectionMode="Single" 
+                  SelectionUnit="Cell" 
+                  CanUserResizeColumns="False" 
+                  CanUserSortColumns="False" 
+                  RowHeight="30" 
+                  CanUserAddRows="False" 
+                  SelectedCellsChanged="scheduleItemsDataGrid_SelectedCellsChanged" 
+                  CurrentItem="{Binding GameViewModel.SelectItem,Mode=TwoWay}"
+                  ItemsSource="{Binding GameViewModel.Turn.Groups}">
+            
+            <!-- 捕获单元格编辑完成事件 -->
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="CellEditEnding">
+                    <i:InvokeCommandAction  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Path=DataContext.GameViewModel.CellEditEndingCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+            <!-- 标题栏文字居中 -->
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+   
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Width="40" Header="组"  Binding="{Binding Num}" IsReadOnly="True" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <!--<DataGridTextColumn Width="*" Header="选手 1" Binding="{Binding Play1.QQ}" IsReadOnly="True" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>-->
+                <DataGridTemplateColumn Header="选手 1"  Width="*" IsReadOnly="True" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Play1.QQ}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Velakkanathem"/>
+                                        <MenuItem Header="Musiri"/>
+                                        <MenuItem Header="Trichy"/>
+                                    </ContextMenu>
+                                </TextBlock.ContextMenu>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Width="*" Header="昵称" Binding="{Binding Play1.Name}" IsReadOnly="True" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="比分" SortMemberPath="IsSelected" Width="100" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Result.Define}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <Grid FocusManager.FocusedElement="{Binding ElementName= cmbox_result}" >
+                                <ComboBox
+                                    Name="cmbox_result"
+                                    ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.GameViewModel.Results}" 
+                                    DisplayMemberPath="Define" 
+                                    SelectedValue="{Binding Result, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="SelectionChanged">
+                                            <i:InvokeCommandAction  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Path=DataContext.GameViewModel.SetResultCommand}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </ComboBox>
+                                </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+      
+                <!--<DataGridComboBoxColumn Width="100" Header="Score" SelectedValueBinding="{Binding Path=Value}" ItemsSource="{Binding Path=SelectionList,ElementName=this}"/>-->
+                <DataGridTextColumn Width="*" Header="昵称" Binding="{Binding Play2.Name}" IsReadOnly="True" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="选手 2"  Width="*" IsReadOnly="True" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Play2.QQ}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="删除"/>
+                                    </ContextMenu>
+                                </TextBlock.ContextMenu>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--<DataGridTextColumn Width="*" Header="选手 2" Binding="{Binding Play2.QQ}" IsReadOnly="True"  >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>-->
+
+                <DataGridTextColumn Width="*" Header="备注" Binding="{Binding Remark,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  >
+                    
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="TextBox">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                        </Style>
+                        
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Grid.Row="4" Content="复制到剪贴板" IsEnabled="{Binding CanControControls}" Command="{Binding GameViewModel.OutPutGroupCommand}" />
+    </Grid>
+</Window>

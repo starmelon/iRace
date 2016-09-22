@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--  -->
+<Hosts>
+    <Host>
+      <QQ>512544046</QQ>
+      <Name>侠客</Name>
+      <Introduction>大家好，我是侠客</Introduction>
+    </Host>
+    <Host>
+      <QQ>921439818</QQ>
+      <Name>尸体</Name>
+      <Introduction>大家好，我是尸体</Introduction>
+    </Host>
+    <Host>
+      <QQ>405973386</QQ>
+      <Name>尼亚</Name>
+      <Introduction>大家好，我是尼亚</Introduction>
+    </Host>
+    <Host>
+      <QQ>1301336800</QQ>
+      <Name>风酱</Name>
+      <Introduction>大家好，我是风酱</Introduction>
+    </Host>
+</Hosts>

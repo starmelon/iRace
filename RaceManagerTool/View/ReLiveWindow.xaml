@@ -1,0 +1,91 @@
+﻿<Window x:Class="RaceManagerTool.View.ReLiveWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RaceManagerTool.View"
+        mc:Ignorable="d"
+        Title="ReLiveWindow" Height="500" Width="400" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+
+
+        <DataGrid CanUserAddRows="False" CanUserResizeRows="False" AutoGenerateColumns="False" HeadersVisibility="Column" ItemsSource="{Binding LosePlayers}">
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="Padding" Value="0,0,0,0" />
+                    <Setter Property="Margin" Value="0,0,0,0" />
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="60" Header="死亡轮次" Binding="{Binding Player.FinalTurnIndex}" IsReadOnly="True" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="QQ" Binding="{Binding Player.QQ}" IsReadOnly="True" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="昵称" Binding="{Binding Player.Name}" IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="复活" Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox 
+                                IsEnabled="{Binding CanSelectRelive}"
+                                IsChecked="{Binding CanReLive,  UpdateSourceTrigger=PropertyChanged}"
+                                        VerticalAlignment="Center" HorizontalAlignment="Center"
+                                        Command="{Binding Path=DataContext.SelectReliveCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGrid}}}" IsTabStop="False" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Button Content="复制勾选名单" Command="{Binding OutputSelectPlayers}" ></Button>
+            
+            <Button Grid.Column="1" ContentStringFormat="" Command="{Binding ReliveCommand}">
+                <Button.Content>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="复活 ( 已选 {0} , 最多 {1} 人 )">
+                                <Binding Path="ReliveNum" />
+                                <Binding Path="ReliveNumMax" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+            
+            
+        </Grid>
+        
+        
+    </Grid>
+</Window>
