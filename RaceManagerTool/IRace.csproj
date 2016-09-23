@@ -70,6 +70,10 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\gong-wpf-dragdrop.1.0.0\lib\net45\GongSolutions.Wpf.DragDrop.dll</HintPath>
       <Private>True</Private>
@@ -111,6 +115,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Dao\ZipDao.cs" />
     <Compile Include="Tools\LibZResolver.cs" />
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\GameSetting.cs" />
@@ -122,11 +127,12 @@
     <Compile Include="Services\AppService.cs" />
     <Compile Include="Services\PlayerService.cs" />
     <Compile Include="Services\GameService.cs" />
-    <Compile Include="Dao\XmlHostService.cs" />
-    <Compile Include="Dao\XmlResultService.cs" />
+    <Compile Include="Dao\XmlHostDao.cs" />
+    <Compile Include="Dao\XmlResultDao.cs" />
     <Compile Include="Tools\Behaviours.cs" />
     <Compile Include="Tools\Messenger.cs" />
     <Compile Include="Tools\MyEeventCommand.cs" />
+    <Compile Include="Tools\SerializableDictionary.cs" />
     <Compile Include="Tools\XMLSerializeUitl.cs" />
     <Compile Include="ViewModels\DeadPlayerViewModel.cs" />
     <Compile Include="ViewModels\GameInfoWinViewModel.cs" />
@@ -226,6 +232,7 @@
     <Content Include="Data\Results.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resource\head.jpg" />
     <Resource Include="Resource\IRace.ico" />
     <Resource Include="Resource\OcgSoftLogo.png" />
   </ItemGroup>

@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:dragDrop="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
-        Title="MainWindow" Height="500" Width="640" Name="mainwin" WindowStartupLocation="CenterScreen" Closed="mainwin_Closed" >
+        Title="iRace - By starMelon" Height="500" Width="640" Name="mainwin" WindowStartupLocation="CenterScreen" Closed="mainwin_Closed" >
     <Window.Resources>
-        
+
         <!--<Style x:Key="SingleClickEditing" TargetType="{x:Type DataGridCell}">
             <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown"></EventSetter>
         </Style>-->
@@ -13,12 +13,12 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="99"/>
             <RowDefinition />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
-        
-        <Grid Grid.Row="0">
+
+        <Grid Grid.Row="0" Background="Transparent">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -35,14 +35,35 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
+            <Grid.Triggers>
+
+                <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard AutoReverse="False">
+                            <DoubleAnimation Storyboard.TargetName="head" Storyboard.TargetProperty="Opacity" Duration="00:00:0.3" From="1" To="0"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+
+                </EventTrigger>
+                <EventTrigger RoutedEvent="UIElement.MouseLeave" >
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="head" Storyboard.TargetProperty="Opacity" Duration="00:00:0.3" From="0" To="1"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Grid.Triggers>
+
+
             <Image Grid.Row="2"  Grid.ColumnSpan="2" Source="/Resource/OcgSoftLogo.png" HorizontalAlignment="Left" Margin="1,1,0,1" />
 
             <Button Grid.Column="0" Grid.ColumnSpan="2" Content="编辑赛事" 
                     Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Path=DataContext.SetGameInfoCommand}"
-                      /> <!--Command="{Binding SetGameInfoCommand}"-->
+                      />
+            <!--Command="{Binding SetGameInfoCommand}"-->
 
             <Button Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Content="开赛" IsEnabled="{Binding CanControControls}" Command="{Binding GameViewModel.StartGameCommand}"  />
-            <Button Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" Content="结束" IsEnabled="{Binding CanControControls}" />
+            <Button Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" Content="结束" IsEnabled="{Binding CanControControls}" Command="{Binding GameViewModel.EndToZipGameCommand}" />
             <Button Grid.Row="1" Grid.Column="0" Content="删除本轮" IsEnabled="{Binding CanControControls}" Command="{Binding GameViewModel.RomoveTurnCommand}"  />
             <Button Grid.Row="1" Grid.Column="1" Content="重置本轮" IsEnabled="{Binding CanControControls}" Command="{Binding GameViewModel.ResetTurnCommand}" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="10000" ToolTipService.ShowOnDisabled="True">
                 <Button.ToolTip>
@@ -96,11 +117,31 @@
                 </i:Interaction.Triggers>
             </ComboBox>
 
+            <Grid Grid.RowSpan="2" Grid.ColumnSpan="8" x:Name="head" IsHitTestVisible="False">
+                <Grid.Background>
+                    <ImageBrush ImageSource="/Resource/head.jpg"/>
+                </Grid.Background>
+                <!--<Grid.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <Trigger Property="UIElement.IsMouseOver" Value="true">
+                                <Setter TargetName="head" Property="Grid.Visibility" Value="Collapsed" ></Setter>
+                            </Trigger>
+                            <Trigger Property="UIElement.IsMouseOver" Value="false">
+                                <Setter Property="UIElement.Visibility" Value="Visible" ></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>-->
+                
+                
+            </Grid>
+
             <!--<Button Grid.Column="0" Content="系统设置" />-->
         </Grid>
-        
 
-     
+
+
 
         <DataGrid Grid.Row="1" Name="dg_groups"  
                   AutoGenerateColumns="False"  
@@ -118,7 +159,7 @@
                   SelectedCellsChanged="scheduleItemsDataGrid_SelectedCellsChanged" 
                   CurrentItem="{Binding GameViewModel.SelectItem,Mode=TwoWay}"
                   ItemsSource="{Binding GameViewModel.Turn.Groups}">
-            
+
             <!-- 捕获单元格编辑完成事件 -->
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="CellEditEnding">
@@ -133,7 +174,7 @@
                     <Setter Property="VerticalContentAlignment" Value="Center" />
                 </Style>
             </DataGrid.ColumnHeaderStyle>
-   
+
             <DataGrid.Columns>
 
                 <DataGridTextColumn Width="40" Header="组"  Binding="{Binding Num}" IsReadOnly="True" >
@@ -197,11 +238,11 @@
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </ComboBox>
-                                </Grid>
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-      
+
                 <!--<DataGridComboBoxColumn Width="100" Header="Score" SelectedValueBinding="{Binding Path=Value}" ItemsSource="{Binding Path=SelectionList,ElementName=this}"/>-->
                 <DataGridTextColumn Width="*" Header="昵称" Binding="{Binding Play2.Name}" IsReadOnly="True" >
                     <DataGridTextColumn.ElementStyle>
@@ -234,7 +275,7 @@
                 </DataGridTextColumn>-->
 
                 <DataGridTextColumn Width="*" Header="备注" Binding="{Binding Remark,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  >
-                    
+
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -247,7 +288,7 @@
                             <Setter Property="HorizontalContentAlignment" Value="Center" />
                             <Setter Property="VerticalContentAlignment" Value="Center" />
                         </Style>
-                        
+
                     </DataGridTextColumn.EditingElementStyle>
                 </DataGridTextColumn>
             </DataGrid.Columns>

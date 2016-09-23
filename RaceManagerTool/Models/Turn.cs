@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRace.Tools;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -16,9 +17,12 @@ namespace RaceManagerTool.Models
 
         public ObservableCollection<Group> Groups { get; set; }
 
+        public SerializableDictionary<string, bool> ReLifeList;
+
         public Turn()
         {
             Groups = new ObservableCollection<Group>() { };
+            ReLifeList = new SerializableDictionary<string, bool>();
         }
     }
 }

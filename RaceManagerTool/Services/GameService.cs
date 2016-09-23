@@ -1,4 +1,6 @@
-﻿using Prism.Mvvm;
+﻿using IRace.Dao;
+using IRace.Tools;
+using Prism.Mvvm;
 using RaceManagerTool.Models;
 using RaceManagerTool.Tools;
 using System;
@@ -1306,6 +1308,25 @@ namespace RaceManagerTool.Services
                     (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[√]" : ""));
             }
             strBuilder.AppendLine("---------------------------------------------");
+            Turn turn = Game.Turns[turnindex];
+            if (turn.ReLifeList.Count > 0)
+            {
+                strBuilder.AppendLine("以下为复活名单：");
+
+                int num = 1;
+                foreach (var p in turn.ReLifeList)
+                {
+                    foreach (var pcur in Game.Players)
+                    {
+                        if (p.Key.Equals(pcur.QQ))
+                        {
+                            strBuilder.AppendLine("[" +  num.ToString().PadLeft(2, '0') + "]"+"[" + pcur.QQ + "]" + "[" + pcur.Name + "]" + "["+ (p.Value ? "√": "×") + "]");
+                        }
+                    }
+                    num++;
+                }
+                strBuilder.AppendLine("---------------------------------------------");
+            }
             strBuilder.AppendLine("请选手确认分组或战况(超时不确认此表将生效)");
             strBuilder.AppendLine("---------------------------------------------");
 
@@ -1359,7 +1380,7 @@ namespace RaceManagerTool.Services
         #region 比分结果相关
 
         /// <summary>
-        /// 是否已设置宣布结果
+        /// 是否已设置全部结果
         /// </summary>
         /// <returns></returns>
         public bool isAllResultsSet()
@@ -1523,16 +1544,22 @@ namespace RaceManagerTool.Services
 
             int reliveNum = getRelvieNumMax();
 
-            int iSeed = 10;
-            Random ro = new Random(iSeed);
             long tick = DateTime.Now.Ticks;
             Random ran = new Random((int)(tick & 0xffffffffL) | (int)(tick >> 32));
 
+            
+
             ObservableCollection<Player> players = getNewestPlayers();
+
+            SerializableDictionary<string, bool> reliveList = getLastTurn().ReLifeList;
 
             if (joinRelivePlayers.Count() <= reliveNum)
             {
                 players.AddRange(joinRelivePlayers);
+                foreach (var jplayer in joinRelivePlayers)
+                {
+                    reliveList.Add(jplayer.QQ, true);
+                }
             }
             else
             {
@@ -1543,18 +1570,33 @@ namespace RaceManagerTool.Services
                     Player player = joinRelivePlayers[reliveindex];
                     joinRelivePlayers.RemoveAt(reliveindex);
                     players.Add(player);
+                    reliveList.Add(player.QQ, true);
+                }
+                foreach (var jplayer in joinRelivePlayers)
+                {
+                    reliveList.Add(jplayer.QQ, false);
                 }
             }
 
             removeNewestTurn();
             createNewEliminationTurnByPlayers(players);
 
+            getLastTurn().ReLifeList = reliveList;
+
             SaveGameInfo2Disk();
         }
 
         #endregion
 
-        
+        /// <summary>
+        /// 打包
+        /// </summary>
+        public void EndToZipGame()
+        {
+            string packPath = Path.Combine(Environment.CurrentDirectory, @"Game\Temp", Game.GameSetting.FullName);
+            string savePath = Path.Combine(Environment.CurrentDirectory, @"Game\Finish", Game.GameSetting.FullName);
+            ZipDao.ZipGame(Game.GameSetting.FullName, packPath, savePath);
+        }
 
         public void TestSetResult()
         {

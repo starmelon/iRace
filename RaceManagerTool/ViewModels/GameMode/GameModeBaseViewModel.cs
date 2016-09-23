@@ -121,7 +121,8 @@ namespace RaceManagerTool.ViewModels
 
         public DelegateCommand ReLiveCommand { get; set; }
         public DelegateCommand OutPutGroupCommand { get; set; }
-
+        public DelegateCommand EndToZipGameCommand { get; set; }
+        
 
         public GameModeBaseViewModel()
         {
@@ -144,6 +145,8 @@ namespace RaceManagerTool.ViewModels
             this.ReLiveCommand = new DelegateCommand(new Action(this.ReLiveCommandExecute), new Func<bool>(this.canReLiveCommandExecute));
             this.OutPutGroupCommand = new DelegateCommand(new Action(this.OutPutGroupCommandExecute),new Func<bool>(CanOutPutGroupCommandExecute));
             this.SelectTurnCommand = new DelegateCommand(new Action(this.SelectTurnCommandExecute));
+            this.EndToZipGameCommand = new DelegateCommand(new Action(this.EndToZipGameCommandExecute),new Func<bool>(CanEndToZipGameCommandExecute));
+
 
             Results = GameService.GetInstance().Results;
             Turn = GameService.GetInstance().getLastTurn();
@@ -156,6 +159,39 @@ namespace RaceManagerTool.ViewModels
                 ListTurns.Add(getTurnName(i));
             }
             SelectTurn = turnsum - 1;
+        }
+
+        /// <summary>
+        /// 预判能否执行EndToZipGameCommandExecute
+        /// </summary>
+        /// <returns></returns>
+        private bool CanEndToZipGameCommandExecute()
+        {
+            if (GameService.GetInstance().Game == null)
+            {
+                return false;
+            }
+
+            if (GameService.GetInstance().Game.Turns.Count != GameService.GetInstance().Game.GameSetting.Turns)
+            {
+                return false;
+            }
+
+            if (GameService.GetInstance().isAllResultsSet() == false)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// 结束并压缩比赛文件的命令
+        /// </summary>
+        private void EndToZipGameCommandExecute()
+        {
+            GameService.GetInstance().EndToZipGame();
         }
 
         #region 抽象方法组
@@ -252,6 +288,7 @@ namespace RaceManagerTool.ViewModels
             this.ReLiveCommand.RaiseCanExecuteChanged();
             this.OutPutGroupCommand.RaiseCanExecuteChanged();
             this.SelectTurnCommand.RaiseCanExecuteChanged();
+            this.EndToZipGameCommand.RaiseCanExecuteChanged();
         }
     }
 }
