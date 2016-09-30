@@ -1,4 +1,5 @@
-﻿using IRace.Dao;
+﻿using iRace.Dao;
+using IRace.Dao;
 using IRace.Tools;
 using Prism.Mvvm;
 using RaceManagerTool.Models;
@@ -81,7 +82,7 @@ namespace RaceManagerTool.Services
             Game.GameSetting.Host = Hosts[0];
             Game.GameSetting.Num = 32;
             UpdataTurns();
-            Game.GameSetting.Name = "竞赛联盟AA赛-" + System.DateTime.Now.Year + "年BB场比赛";
+            Game.GameSetting.Name = "竞赛联盟周赛 - " + DateTime.Now.ToString("yyyy.MM.dd") + "比赛";
             ((System.ComponentModel.IEditableObject)Game.GameSetting).EndEdit();
             
         }
@@ -262,6 +263,8 @@ namespace RaceManagerTool.Services
                 Directory.CreateDirectory(deckspath);
                 string infopath = System.IO.Path.Combine(path, @"info");
                 Directory.CreateDirectory(infopath);
+                string turnpath = System.IO.Path.Combine(path, @"Turns");
+                Directory.CreateDirectory(turnpath);
                 Games.Add(Game);
                 SaveGameInfo2Disk();
                 SaveGameSetting2Disk();
@@ -360,28 +363,44 @@ namespace RaceManagerTool.Services
                     string targetPath = System.IO.Path.Combine(Environment.CurrentDirectory, @"Game\Temp", Game.GameSetting.FullNameOld, @"Decks\", System.IO.Path.GetFileName(item));
                     if (File.Exists(targetPath) == false)
                     {
-                        System.IO.File.Copy(sourcePath, targetPath, true);
-                        AddGamer(System.IO.Path.GetFileNameWithoutExtension(item));
+                        
+                        if(AddGamer(System.IO.Path.GetFileNameWithoutExtension(item)))
+                        {
+                            System.IO.File.Copy(sourcePath, targetPath, true);
+                        }
                     }
 
                 }
             }
             SavePlays2Disk();
+
         }
 
         /// <summary>
         /// 添加参赛玩家
         /// </summary>
         /// <param name="filename"></param>
-        public void AddGamer(string filename)
+        public bool AddGamer(string filename)
         {
-            string[] infos = filename.Split('+');
-            if (infos.Length != 2)
+            string[] infos = null;
+
+            int stringnum = filename.Length;
+            for (int i = 0; i < stringnum; i++)
             {
-                infos = filename.Split('＋');
+                if (filename[i].Equals('+') || filename[i].Equals('＋'))
+                {
+                    infos = new string[2];
+                    infos[0] = filename.Substring(0, i);
+                    infos[1] = filename.Substring(i + 1);
+                    if (isNumber(infos[0]) == false)
+                    {
+                        infos = null;
+                    }
+                    break;
+                }
             }
 
-            if (infos.Length == 2)
+            if (infos != null)
             {
                 Player gamer = new Player();
                 gamer.QQ = infos[0];
@@ -394,10 +413,21 @@ namespace RaceManagerTool.Services
             }
             else
             {
+                
+                MessageBox.Show("检测到无法识别的文件名[" + filename + "]"
+                    + "\r 1.请检查是否QQ是否为纯数字"
+                    + "\r 2.是否使用了不在定义范围内的QQ昵称分隔符");
 
-                MessageBox.Show("检测到无法识别的文件名" + filename);
+                return false;
             }
 
+            return true;
+
+        }
+
+        public static bool isNumber(string testString)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(testString, @"[0-9]{" + testString.Length.ToString() + "}");
         }
 
         /// <summary>
@@ -1284,28 +1314,71 @@ namespace RaceManagerTool.Services
         /// <param name="turnindex"></param>
         public void OutPutGroupToClipBoard(int turnindex)
         {
+            StringBuilder strBuilder = getStatusWithoutRemark(turnindex);
+            CopyToClipBoard(strBuilder);
+        }
+
+        /// <summary>
+        /// 生成战况分组表
+        /// </summary>
+        /// <param name="turnindex"></param>
+        public StringBuilder getStatus(int turnindex)
+        {
             StringBuilder strBuilder = new StringBuilder();
             strBuilder.AppendLine("<--- " + Game.GameSetting.FullName + " --->");
             strBuilder.AppendLine("---------------------------------------------");
             strBuilder.AppendLine("第[ " + (turnindex + 1) + " ]轮对决战况表");
             strBuilder.AppendLine("---------------------------------------------");
-            foreach (Group group in Game.Turns[turnindex].Groups)
+            if (turnindex == Game.GameSetting.Turns - 1)
             {
+                #region 冠亚组
+
+                Group group = Game.Turns[turnindex].Groups[0];
                 strBuilder.AppendLine(
-                    "[" + group.Num.ToString().PadLeft(2, '0') + "]组");
+                            "[" + group.Num.ToString().PadLeft(2, '0') + "]组");
                 strBuilder.AppendLine(
                     "   [选手A][" + (group.Play1 == null ? "" : group.Play1.QQ) + "][" + (group.Play1 == null ? "" : group.Play1.Name) + "]" +
-                    (group.Result != null && (group.Result.Win > group.Result.Lose) ? "[√]" : ""));
+                    (group.Result != null && (group.Result.Win > group.Result.Lose) ? "[冠军]" : "[亚军]"));
                 strBuilder.AppendLine(
                     "   [比 分][" + (group.Result == null || group.Result.Equals("") ? "VS" : group.Result.Define) + "]");
-
-                //(String.IsNullOrWhiteSpace(group.Remark) == false ?
-                //    "[判罚：" + group.Remark + "]" : "")
-
-
                 strBuilder.AppendLine(
                     "   [选手B][" + (group.Play2 == null ? "" : group.Play2.QQ) + "][" + (group.Play2 == null ? "" : group.Play2.Name) + "]" +
-                    (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[√]" : ""));
+                    (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[冠军]" : "亚军"));
+
+                #endregion
+
+                #region 季殿组
+
+                group = Game.Turns[turnindex].Groups[1];
+                strBuilder.AppendLine(
+                            "[" + group.Num.ToString().PadLeft(2, '0') + "]组");
+                strBuilder.AppendLine(
+                    "   [选手A][" + (group.Play1 == null ? "" : group.Play1.QQ) + "][" + (group.Play1 == null ? "" : group.Play1.Name) + "]" +
+                    (group.Result != null && (group.Result.Win > group.Result.Lose) ? "[季军]" : "[殿军]"));
+                strBuilder.AppendLine(
+                    "   [比 分][" + (group.Result == null || group.Result.Equals("") ? "VS" : group.Result.Define) + "]");
+                strBuilder.AppendLine(
+                    "   [选手B][" + (group.Play2 == null ? "" : group.Play2.QQ) + "][" + (group.Play2 == null ? "" : group.Play2.Name) + "]" +
+                    (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[季军]" : "殿军"));
+
+                #endregion
+            }
+            else
+            {
+                foreach (Group group in Game.Turns[turnindex].Groups)
+                {
+                    strBuilder.AppendLine(
+                        "[" + group.Num.ToString().PadLeft(2, '0') + "]组");
+                    strBuilder.AppendLine(
+                        "   [选手A][" + (group.Play1 == null ? "" : group.Play1.QQ) + "][" + (group.Play1 == null ? "" : group.Play1.Name) + "]" +
+                        (group.Result != null && (group.Result.Win > group.Result.Lose) ? "[√]" : ""));
+                    strBuilder.AppendLine(
+                        "   [比 分][" + (group.Result == null || group.Result.Equals("") ? "VS" : group.Result.Define) + "]");
+                    strBuilder.AppendLine(
+                        "   [选手B][" + (group.Play2 == null ? "" : group.Play2.QQ) + "][" + (group.Play2 == null ? "" : group.Play2.Name) + "]" +
+                        (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[√]" : ""));
+                }
+                
             }
             strBuilder.AppendLine("---------------------------------------------");
             Turn turn = Game.Turns[turnindex];
@@ -1320,7 +1393,7 @@ namespace RaceManagerTool.Services
                     {
                         if (p.Key.Equals(pcur.QQ))
                         {
-                            strBuilder.AppendLine("[" +  num.ToString().PadLeft(2, '0') + "]"+"[" + pcur.QQ + "]" + "[" + pcur.Name + "]" + "["+ (p.Value ? "√": "×") + "]");
+                            strBuilder.AppendLine("[" + num.ToString().PadLeft(2, '0') + "]" + "[" + pcur.QQ + "]" + "[" + pcur.Name + "]" + "[" + (p.Value ? "√" : "×") + "]");
                         }
                     }
                     num++;
@@ -1330,6 +1403,108 @@ namespace RaceManagerTool.Services
             strBuilder.AppendLine("请选手确认分组或战况(超时不确认此表将生效)");
             strBuilder.AppendLine("---------------------------------------------");
 
+            return strBuilder;
+
+            
+
+        }
+
+        public StringBuilder getStatusWithoutRemark(int turnindex)
+        {
+            StringBuilder strBuilder = new StringBuilder();
+            strBuilder.AppendLine("<--- " + Game.GameSetting.FullName + " --->");
+            strBuilder.AppendLine("---------------------------------------------");
+            strBuilder.AppendLine("第[ " + (turnindex + 1) + " ]轮对决战况表");
+            strBuilder.AppendLine("---------------------------------------------");
+            if (turnindex == Game.GameSetting.Turns)
+            {
+                #region 冠亚组
+
+                Group group = Game.Turns[turnindex].Groups[0];
+                strBuilder.AppendLine(
+                            "[" + group.Num.ToString().PadLeft(2, '0') + "]组");
+                strBuilder.AppendLine(
+                    "   [选手A][" + (group.Play1 == null ? "" : group.Play1.QQ) + "][" + (group.Play1 == null ? "" : group.Play1.Name) + "]" +
+                    (group.Result != null && (group.Result.Win > group.Result.Lose) ? "[冠军]" : "[亚军]"));
+                strBuilder.AppendLine(
+                    "   [比 分][" + (group.Result == null || group.Result.Equals("") ? "VS" : group.Result.Define) + "]" +
+                    (String.IsNullOrWhiteSpace(group.Remark) == false ? "[判罚：" + group.Remark + "]" : ""));
+                strBuilder.AppendLine(
+                    "   [选手B][" + (group.Play2 == null ? "" : group.Play2.QQ) + "][" + (group.Play2 == null ? "" : group.Play2.Name) + "]" +
+                    (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[冠军]" : "亚军"));
+
+                #endregion
+
+                #region 季殿组
+
+                group = Game.Turns[turnindex].Groups[1];
+                strBuilder.AppendLine(
+                            "[" + group.Num.ToString().PadLeft(2, '0') + "]组");
+                strBuilder.AppendLine(
+                    "   [选手A][" + (group.Play1 == null ? "" : group.Play1.QQ) + "][" + (group.Play1 == null ? "" : group.Play1.Name) + "]" +
+                    (group.Result != null && (group.Result.Win > group.Result.Lose) ? "[季军]" : "[殿军]"));
+                strBuilder.AppendLine(
+                    "   [比 分][" + (group.Result == null || group.Result.Equals("") ? "VS" : group.Result.Define) + "]" +
+                    (String.IsNullOrWhiteSpace(group.Remark) == false ? "[判罚：" + group.Remark + "]" : ""));
+                strBuilder.AppendLine(
+                    "   [选手B][" + (group.Play2 == null ? "" : group.Play2.QQ) + "][" + (group.Play2 == null ? "" : group.Play2.Name) + "]" +
+                    (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[季军]" : "殿军"));
+
+                #endregion
+            }
+            else
+            {
+                foreach (Group group in Game.Turns[turnindex].Groups)
+                {
+                    strBuilder.AppendLine(
+                        "[" + group.Num.ToString().PadLeft(2, '0') + "]组");
+                    strBuilder.AppendLine(
+                        "   [选手A][" + (group.Play1 == null ? "" : group.Play1.QQ) + "][" + (group.Play1 == null ? "" : group.Play1.Name) + "]" +
+                        (group.Result != null && (group.Result.Win > group.Result.Lose) ? "[√]" : ""));
+                    strBuilder.AppendLine(
+                        "   [比 分][" + (group.Result == null || group.Result.Equals("") ? "VS" : group.Result.Define) + "]" +
+                        (String.IsNullOrWhiteSpace(group.Remark) == false ? "[判罚：" + group.Remark + "]" : ""));
+                    strBuilder.AppendLine(
+                        "   [选手B][" + (group.Play2 == null ? "" : group.Play2.QQ) + "][" + (group.Play2 == null ? "" : group.Play2.Name) + "]" +
+                        (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[√]" : ""));
+                }
+
+            }
+            strBuilder.AppendLine("---------------------------------------------");
+            Turn turn = Game.Turns[turnindex];
+            if (turn.ReLifeList.Count > 0)
+            {
+                strBuilder.AppendLine("以下为复活名单：");
+
+                int num = 1;
+                foreach (var p in turn.ReLifeList)
+                {
+                    foreach (var pcur in Game.Players)
+                    {
+                        if (p.Key.Equals(pcur.QQ))
+                        {
+                            strBuilder.AppendLine("[" + num.ToString().PadLeft(2, '0') + "]" + "[" + pcur.QQ + "]" + "[" + pcur.Name + "]" + "[" + (p.Value ? "√" : "×") + "]");
+                        }
+                    }
+                    num++;
+                }
+                strBuilder.AppendLine("---------------------------------------------");
+            }
+            strBuilder.AppendLine("请选手确认分组或战况(超时不确认此表将生效)");
+            strBuilder.AppendLine("---------------------------------------------");
+
+            return strBuilder;
+
+
+
+        }
+
+        /// <summary>
+        /// 复制到剪贴板
+        /// </summary>
+        /// <param name="strBuilder"></param>
+        private static void CopyToClipBoard(StringBuilder strBuilder)
+        {
             Clipboard.Clear();
             Clipboard.SetText(strBuilder.ToString());
         }
@@ -1593,9 +1768,23 @@ namespace RaceManagerTool.Services
         /// </summary>
         public void EndToZipGame()
         {
+            string path = System.IO.Path.Combine(Environment.CurrentDirectory, @"Game\Temp", Game.GameSetting.FullName);
+            //string turnspath = System.IO.Path.Combine(path, @"Turns",);
+
+            int turnnum = Game.Turns.Count();
+
+            for (int i = 0; i < turnnum; i++)
+            {
+                //getStatus(i);
+                TextDao.OutPutTurn(System.IO.Path.Combine(path, @"Turns",(i+1).ToString()+".txt"), getStatus(i));
+            }
+
             string packPath = Path.Combine(Environment.CurrentDirectory, @"Game\Temp", Game.GameSetting.FullName);
             string savePath = Path.Combine(Environment.CurrentDirectory, @"Game\Finish", Game.GameSetting.FullName);
             ZipDao.ZipGame(Game.GameSetting.FullName, packPath, savePath);
+
+            string finishpath = Path.Combine(Environment.CurrentDirectory, @"Game\Finish");
+            System.Diagnostics.Process.Start("explorer.exe", finishpath);
         }
 
         public void TestSetResult()

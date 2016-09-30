@@ -11,7 +11,7 @@ using System.Windows;
 [assembly: AssemblyDescription("A Tool For Managing Race")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("IRace")]
+[assembly: AssemblyProduct("iRace")]
 [assembly: AssemblyCopyright("Copyright © 中国OCG工作室 (Ocgsoft) 2005-2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -52,4 +52,4 @@ using System.Windows;
 // 方法是按如下所示使用“*”: 
 [assembly: AssemblyVersion("1.0.*")]
 // [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("0.9.1.0")]
+[assembly: AssemblyFileVersion("1.1.0.0")]

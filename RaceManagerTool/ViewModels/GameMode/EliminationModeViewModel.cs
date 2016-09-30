@@ -453,9 +453,9 @@ namespace RaceManagerTool.ViewModels
                 case 1:
                     return "半决赛";
                 case 2:
-                    return "四强";
-                case 3:
                     return "八强";
+                case 3:
+                    return "十六强";
                 default:
                     return "第" + turnIndex + "轮";
             }

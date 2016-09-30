@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRace", "RaceManagerTool\IRace.csproj", "{A93CBBAD-2107-4E09-8AC4-95A6211C77E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRace", "RaceManagerTool\iRace.csproj", "{A93CBBAD-2107-4E09-8AC4-95A6211C77E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
