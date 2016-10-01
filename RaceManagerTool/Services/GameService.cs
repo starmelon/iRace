@@ -1322,7 +1322,7 @@ namespace RaceManagerTool.Services
         /// 生成战况分组表
         /// </summary>
         /// <param name="turnindex"></param>
-        public StringBuilder getStatus(int turnindex)
+        public StringBuilder getStatusWithoutRemark(int turnindex)
         {
             StringBuilder strBuilder = new StringBuilder();
             strBuilder.AppendLine("<--- " + Game.GameSetting.FullName + " --->");
@@ -1343,7 +1343,7 @@ namespace RaceManagerTool.Services
                     "   [比 分][" + (group.Result == null || group.Result.Equals("") ? "VS" : group.Result.Define) + "]");
                 strBuilder.AppendLine(
                     "   [选手B][" + (group.Play2 == null ? "" : group.Play2.QQ) + "][" + (group.Play2 == null ? "" : group.Play2.Name) + "]" +
-                    (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[冠军]" : "亚军"));
+                    (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[冠军]" : "[亚军]"));
 
                 #endregion
 
@@ -1359,7 +1359,7 @@ namespace RaceManagerTool.Services
                     "   [比 分][" + (group.Result == null || group.Result.Equals("") ? "VS" : group.Result.Define) + "]");
                 strBuilder.AppendLine(
                     "   [选手B][" + (group.Play2 == null ? "" : group.Play2.QQ) + "][" + (group.Play2 == null ? "" : group.Play2.Name) + "]" +
-                    (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[季军]" : "殿军"));
+                    (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[季军]" : "[殿军]"));
 
                 #endregion
             }
@@ -1409,14 +1409,14 @@ namespace RaceManagerTool.Services
 
         }
 
-        public StringBuilder getStatusWithoutRemark(int turnindex)
+        public StringBuilder getStatus(int turnindex)
         {
             StringBuilder strBuilder = new StringBuilder();
             strBuilder.AppendLine("<--- " + Game.GameSetting.FullName + " --->");
             strBuilder.AppendLine("---------------------------------------------");
             strBuilder.AppendLine("第[ " + (turnindex + 1) + " ]轮对决战况表");
             strBuilder.AppendLine("---------------------------------------------");
-            if (turnindex == Game.GameSetting.Turns)
+            if (turnindex == Game.GameSetting.Turns - 1)
             {
                 #region 冠亚组
 
@@ -1431,7 +1431,7 @@ namespace RaceManagerTool.Services
                     (String.IsNullOrWhiteSpace(group.Remark) == false ? "[判罚：" + group.Remark + "]" : ""));
                 strBuilder.AppendLine(
                     "   [选手B][" + (group.Play2 == null ? "" : group.Play2.QQ) + "][" + (group.Play2 == null ? "" : group.Play2.Name) + "]" +
-                    (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[冠军]" : "亚军"));
+                    (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[冠军]" : "[亚军]"));
 
                 #endregion
 
@@ -1448,7 +1448,7 @@ namespace RaceManagerTool.Services
                     (String.IsNullOrWhiteSpace(group.Remark) == false ? "[判罚：" + group.Remark + "]" : ""));
                 strBuilder.AppendLine(
                     "   [选手B][" + (group.Play2 == null ? "" : group.Play2.QQ) + "][" + (group.Play2 == null ? "" : group.Play2.Name) + "]" +
-                    (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[季军]" : "殿军"));
+                    (group.Result != null && (group.Result.Lose > group.Result.Win) ? "[季军]" : "[殿军]"));
 
                 #endregion
             }
@@ -1490,8 +1490,6 @@ namespace RaceManagerTool.Services
                 }
                 strBuilder.AppendLine("---------------------------------------------");
             }
-            strBuilder.AppendLine("请选手确认分组或战况(超时不确认此表将生效)");
-            strBuilder.AppendLine("---------------------------------------------");
 
             return strBuilder;
 
