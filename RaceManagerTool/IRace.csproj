@@ -233,6 +233,9 @@
     <Content Include="Data\Results.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="PreView\主界面1.png" />
+    <Resource Include="PreView\主界面2.png" />
+    <Resource Include="PreView\赛事设置.png" />
     <None Include="功能说明.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
