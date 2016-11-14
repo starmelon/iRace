@@ -1,5 +1,7 @@
 # iRace - 比赛管理工具
 ### 简介
+  ![](https://github.com/starmelon/iRace/blob/master/RaceManagerTool/Resource/IRace.ico)
+  
   这是一个比赛用的赛事管理工具，设计的应用场景和相关需求来源于国内游戏王竞赛联盟所举办的相关赛事。
   
 ### 功能
@@ -37,6 +39,17 @@
  * gong-wpf-dragdrop
 
 ### 软件截图
+ * 比赛设置界面
+ 
+ ![](https://github.com/starmelon/iRace/blob/master/RaceManagerTool/PreView/%E8%B5%9B%E4%BA%8B%E8%AE%BE%E7%BD%AE.png)
+ 
+ * 主界面
+ 
+ ![](https://github.com/starmelon/iRace/blob/master/RaceManagerTool/PreView/%E4%B8%BB%E7%95%8C%E9%9D%A21.png)
+ 
+ * 主界面
+ 
+ ![](https://github.com/starmelon/iRace/blob/master/RaceManagerTool/PreView/%E4%B8%BB%E7%95%8C%E9%9D%A22.png)
 
 ### 关于我
  * 邮箱：starmelon@foxmail.com
