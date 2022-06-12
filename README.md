@@ -51,7 +51,6 @@
  
  ![](https://github.com/starmelon/iRace/blob/master/RaceManagerTool/PreView/%E4%B8%BB%E7%95%8C%E9%9D%A22.png)
 
-### 关于我
- * 邮箱：starmelon@foxmail.com
+
  
  
