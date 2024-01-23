@@ -33,7 +33,7 @@ namespace RaceManagerTool.ViewModels
             set
             {
                 gameViewModel = value;
-                this.OnPropertyChanged("GameViewModel");
+                this.RaisePropertyChanged("GameViewModel");
             }
         }
 
@@ -48,7 +48,7 @@ namespace RaceManagerTool.ViewModels
             set
             {
                 canControControls = value;
-                this.OnPropertyChanged("CanControControls");
+                this.RaisePropertyChanged("CanControControls");
             }
         }
 

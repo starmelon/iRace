@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:dragDrop="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
-        Title="iRace - By starMelon" Height="500" Width="640" Name="mainwin" WindowStartupLocation="CenterScreen" Closed="mainwin_Closed" >
+        Title="iRace - By starMelon V1.2.1" Height="500" Width="640" Name="mainwin" WindowStartupLocation="CenterScreen" Closed="mainwin_Closed" >
     <Window.Resources>
 
         <!--<Style x:Key="SingleClickEditing" TargetType="{x:Type DataGridCell}">

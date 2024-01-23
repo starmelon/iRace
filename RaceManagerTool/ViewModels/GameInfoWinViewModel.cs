@@ -27,7 +27,7 @@ namespace RaceManagerTool.ViewModels
             set 
             {
                 players = value;
-                this.OnPropertyChanged("Players");
+                this.RaisePropertyChanged("Players");
             }
         }
 
@@ -40,7 +40,7 @@ namespace RaceManagerTool.ViewModels
             set
             {
                 canEditTurns = value;
-                this.OnPropertyChanged("CanEditTurns");
+                this.RaisePropertyChanged("CanEditTurns");
             }
         }
 
@@ -51,7 +51,7 @@ namespace RaceManagerTool.ViewModels
             set
             {
                 game = value;
-                this.OnPropertyChanged("Game");
+                this.RaisePropertyChanged("Game");
             }
         }
 

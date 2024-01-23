@@ -40,7 +40,7 @@ namespace RaceManagerTool.ViewModels
             set
             {
                 selectTurn = value;
-                OnPropertyChanged("SelectTurn");
+                RaisePropertyChanged("SelectTurn");
             }
         }
 
@@ -58,7 +58,7 @@ namespace RaceManagerTool.ViewModels
             set
             {
                 selectItem = value;
-                OnPropertyChanged("SelectItem");
+                RaisePropertyChanged("SelectItem");
             }
         }
         /// <summary>
@@ -73,7 +73,7 @@ namespace RaceManagerTool.ViewModels
             set
             {
                 turn = value;
-                OnPropertyChanged("Turn");
+                RaisePropertyChanged("Turn");
             }
         }
 
@@ -94,7 +94,7 @@ namespace RaceManagerTool.ViewModels
             set
             {
                 startNextTurnCommand = value;
-                OnPropertyChanged("StartNextTurnCommand");
+                RaisePropertyChanged("StartNextTurnCommand");
             }
         }
 
@@ -108,7 +108,7 @@ namespace RaceManagerTool.ViewModels
             set
             {
                 resetTurnCommand = value;
-                OnPropertyChanged("ResetTurnCommand");
+                RaisePropertyChanged("ResetTurnCommand");
             }
         }
 

@@ -24,7 +24,7 @@ namespace RaceManagerTool.ViewModels
             set
             {
                 players = value;
-                this.OnPropertyChanged("Players");
+                this.RaisePropertyChanged("Players");
             }
         }
         //public ObservableCollection<Player> Players { get; set; }

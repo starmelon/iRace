@@ -61,13 +61,13 @@ namespace RaceManagerTool.Models
 
         private void OnAllPropertyChanged()
         {
-            OnPropertyChanged("Name");
-            OnPropertyChanged("Fullname");
-            OnPropertyChanged("GameType");
-            OnPropertyChanged("Num");
-            OnPropertyChanged("RealNum");
-            OnPropertyChanged("Turns");
-            OnPropertyChanged("Host");
+            RaisePropertyChanged("Name");
+            RaisePropertyChanged("Fullname");
+            RaisePropertyChanged("GameType");
+            RaisePropertyChanged("Num");
+            RaisePropertyChanged("RealNum");
+            RaisePropertyChanged("Turns");
+            RaisePropertyChanged("Host");
         }
 
         public string Name
@@ -79,7 +79,7 @@ namespace RaceManagerTool.Models
             set
             {
                 this.curData.name = value;
-                OnPropertyChanged("Name");
+                RaisePropertyChanged("Name");
                 setFullName();
             }
         }
@@ -106,7 +106,7 @@ namespace RaceManagerTool.Models
             set
             {
                 this.curData.fullname = value;
-                OnPropertyChanged("Fullname");
+                RaisePropertyChanged("Fullname");
             }
         }
 
@@ -119,7 +119,7 @@ namespace RaceManagerTool.Models
             set
             {
                 this.curData.gametype = value;
-                OnPropertyChanged("GameType");
+                RaisePropertyChanged("GameType");
                 setFullName();
             }
         }
@@ -141,7 +141,7 @@ namespace RaceManagerTool.Models
             set
             {
                 this.curData.num = value;
-                OnPropertyChanged("Num");
+                RaisePropertyChanged("Num");
                 setFullName();
             }
         }
@@ -155,7 +155,7 @@ namespace RaceManagerTool.Models
             set
             {
                 this.curData.realnum = value;
-                OnPropertyChanged("RealNum");
+                RaisePropertyChanged("RealNum");
             }
         }
 
@@ -168,7 +168,7 @@ namespace RaceManagerTool.Models
             set
             {
                 this.curData.turns = value;
-                OnPropertyChanged("Turns");
+                RaisePropertyChanged("Turns");
                 setFullName();
             }
         }
@@ -181,7 +181,7 @@ namespace RaceManagerTool.Models
             set
             {
                 this.curData.host = value;
-                OnPropertyChanged("Host");
+                RaisePropertyChanged("Host");
                 setFullName();
             }
         }

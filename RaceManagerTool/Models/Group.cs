@@ -66,7 +66,7 @@ namespace RaceManagerTool.Models
             set
             {
                 result = value;
-                OnPropertyChanged("Result");
+                RaisePropertyChanged("Result");
                 Resultindex = value != null ? value.Index : -1;
             }
         }

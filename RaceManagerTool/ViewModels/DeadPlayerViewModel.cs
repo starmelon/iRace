@@ -19,7 +19,7 @@ namespace RaceManagerTool.ViewModels
             set
             {
                 canSelectRelive = value;
-                OnPropertyChanged("CanSelectRelive");
+                RaisePropertyChanged("CanSelectRelive");
             }
         }
 
@@ -30,7 +30,7 @@ namespace RaceManagerTool.ViewModels
             set
             {
                 canReLive = value;
-                OnPropertyChanged("CanReLive");
+                RaisePropertyChanged("CanReLive");
             }
         }
 

@@ -44,7 +44,7 @@ namespace RaceManagerTool.Services
             set
             {
                 game = value;
-                this.OnPropertyChanged("Game");
+                this.RaisePropertyChanged("Game");
             }
         }
 
@@ -502,7 +502,8 @@ namespace RaceManagerTool.Services
             //求当前轮次的分组数
             int totalPlayerNum = Game.GameSetting.Num;
             int groupnum = totalPlayerNum / (int)(Math.Pow(2, newTurn.TurnIndex));
-            setTurnGroupByPlayerAndGroupNum(players, newTurn, groupnum);
+            //setTurnGroupByPlayerAndGroupNum(players, newTurn, groupnum);
+            setTurnGroupByPlayerAndGroupNum(players, newTurn, Convert.ToInt32(Math.Ceiling(players.Count/2.0)));
         }
 
         
@@ -530,41 +531,85 @@ namespace RaceManagerTool.Services
                 }
             }
 
-            int playernum = Game.Players.Count;
+            //int playernum = Game.Players.Count;
 
             Turn turn = new Turn();
-            Group firstgroup = new Group();
-            firstgroup.TurnIndex = Game.Turns.Count;
-            firstgroup.Num = 1;
-            turn.Groups.Add(firstgroup);
-            foreach (var player in Game.Players)
+            //Group firstgroup = new Group();
+            //firstgroup.TurnIndex = Game.Turns.Count;
+            //firstgroup.Num = 1;
+            //turn.Groups.Add(firstgroup);
+
+            var playerNum = Game.Players.Count(p => p.Status == false);
+
+            var groupNum = playerNum / 2 + playerNum % 2;
+
+            for (int i = 0; i < groupNum; i++)
             {
-                if (player.Status == false)
+                Group group = new Group();
+                group.TurnIndex = Game.Turns.Count;
+                group.Num = i + 1;
+                turn.Groups.Add(group);
+
+                var players = Game.Players.ToList().FindAll(p => p.Status == false && p.Groups.Count == Game.Turns.Count);
+                group.Play1 = players[0];
+                players[0].Groups.Add(group);
+                for (int j = 1; j < players.Count; j++)
                 {
-                    Group group = turn.Groups[turn.Groups.Count - 1];
-                    if (group.Play1 == null)
+                    foreach (var p1group in group.Play1.Groups)
                     {
-                        group.Play1 = player;
-                        player.Groups.Add(group);
+                        if (p1group.Play1 == players[j] || p1group.Play2 == players[j])
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            group.Play2 = players[j];
+                            players[j].Groups.Add(group);
+                            goto NextGroup;
+                        }
                     }
-                    else if (group.Play2 == null)
-                    {
-                        group.Play2 = player;
-                        player.Groups.Add(group);
-                    }
-                    else
-                    {
-                        Group nextgroup = new Group();
-                        nextgroup.TurnIndex = Game.Turns.Count;
-                        nextgroup.Num = group.Num + 1;
-                        turn.Groups.Add(nextgroup);
-
-                        nextgroup.Play1 = player;
-                        player.Groups.Add(nextgroup);
-                    }
-
                 }
+
+            NextGroup: { }
+
             }
+
+            var lastgroup = turn.Groups[turn.Groups.Count - 1];
+
+            if (lastgroup.Play2 == null)
+            {
+                lastgroup.Result = Results[Results.Count - 3];
+            }
+
+            //foreach (var player in Game.Players)
+            //{
+            //    //已分配的不打第二次
+            //    if (player.Status == false && player.Groups.Count == firstgroup.TurnIndex)
+            //    {
+            //        Group group = turn.Groups[turn.Groups.Count - 1];
+            //        if (group.Play1 == null)
+            //        {
+            //            group.Play1 = player;
+            //            player.Groups.Add(group);
+            //        }
+            //        else if (group.Play2 == null)
+            //        {
+            //            group.Play2 = player;
+            //            player.Groups.Add(group);
+            //        }
+            //        else
+            //        {
+            //            Group nextgroup = new Group();
+            //            nextgroup.TurnIndex = Game.Turns.Count;
+            //            nextgroup.Num = group.Num + 1;
+            //            turn.Groups.Add(nextgroup);
+
+            //            nextgroup.Play1 = player;
+            //            player.Groups.Add(nextgroup);
+            //        }
+
+            //    }
+            //}
             Game.Turns.Add(turn);
 
             return true;

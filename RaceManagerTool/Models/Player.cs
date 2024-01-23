@@ -39,7 +39,7 @@ namespace RaceManagerTool.Models
             set
             {
                 tieTurn = value;
-                OnPropertyChanged("Tie");
+                RaisePropertyChanged("Tie");
             }
         }
         public int LoseTurn { get; set; }

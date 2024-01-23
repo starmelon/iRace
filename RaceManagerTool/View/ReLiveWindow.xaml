@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RaceManagerTool.View"
         mc:Ignorable="d"
-        Title="ReLiveWindow" Height="500" Width="400" WindowStartupLocation="CenterScreen">
+        Title="ReLiveWindow" Height="500" Width="500" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
 
 
-        <DataGrid CanUserAddRows="False" CanUserResizeRows="False" AutoGenerateColumns="False" HeadersVisibility="Column" ItemsSource="{Binding LosePlayers}">
+        <DataGrid CanUserAddRows="False" CanUserResizeRows="False" AutoGenerateColumns="False" HeadersVisibility="Column" ItemsSource="{Binding LosePlayers}" IsReadOnly ="True">
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -50,8 +50,9 @@
                 <DataGridTemplateColumn Header="复活" Width="50">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
+                            <!--IsEnabled="{Binding CanSelectRelive}"-->
                             <CheckBox 
-                                IsEnabled="{Binding CanSelectRelive}"
+                                IsEnabled="{Binding Path=DataContext.ArtificialMode, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGrid}}}"
                                 IsChecked="{Binding CanReLive,  UpdateSourceTrigger=PropertyChanged}"
                                         VerticalAlignment="Center" HorizontalAlignment="Center"
                                         Command="{Binding Path=DataContext.SelectReliveCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGrid}}}" IsTabStop="False" />
@@ -64,6 +65,7 @@
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition />
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
@@ -82,7 +84,8 @@
                     </TextBlock>
                 </Button.Content>
             </Button>
-            
+
+            <Button Grid.Column="2" Content="随机复活" Command="{Binding AutoReliveCommand}"></Button>
             
         </Grid>
         
